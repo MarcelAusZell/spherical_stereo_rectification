@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <link rel="stylesheet" href="./styles/content.css" />
+  <link rel="stylesheet" href="./styles/sidebar.css" />
+  <link rel="stylesheet" href="./styles/media.css" />
+
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      background-color: black;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SIDEBAR -->
+  <div class="sidebar-container">
+    <button id="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="false">Contents</button>
+    <aside class="sidebar">
+      <h2>Contents</h2>
+      <ul>
+        <li><a href="#section-01">Introduction</a></li>
+        <li><a href="#section-02">Fisheye Images</a></li>
+        <li><a href="#section-03">Fisheye Projections</a></li>
+        <li><a href="#section-04">Spherical Epipolar Geometry</a></li>
+        <li><a href="#section-05">Spherical Stereo Rectification</a></li>
+      </ul>
+    </aside>
+    <div class="overlay"></div>
+  </div>
+
+  <!-- CONTENT -->
+  <main class="content"></main>
+</body>
+
+
+<script>
+  const button = document.getElementById("sidebar-toggle");
+  const sidebar = document.querySelector(".sidebar");
+  const overlay = document.querySelector(".overlay");
+  const links = sidebar.querySelectorAll("a");
+
+  function closeSidebar() {
+    sidebar.classList.remove("open");
+    button.setAttribute("aria-expanded", "false");
+  }
+
+  button.addEventListener("click", () => {
+    const isOpen = sidebar.classList.toggle("open");
+    button.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  overlay.addEventListener("click", closeSidebar);
+
+  links.forEach((link) => {
+    link.addEventListener("click", closeSidebar);
+  });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+<script>
+  async function loadSection() {
+    const section_1_response = await fetch("./sections/section-01.html");
+    const section_1_html = await section_1_response.text();
+
+    const section_2_response = await fetch("./sections/section-02.html");
+    const section_2_html = await section_2_response.text();
+
+    const section_3_response = await fetch("./sections/section-03.html");
+    const section_3_html = await section_3_response.text();
+
+    const section_4_response = await fetch("./sections/section-04.html");
+    const section_4_html = await section_4_response.text();
+
+    const section_5_response = await fetch("./sections/section-05.html");
+    const section_5_html = await section_5_response.text();
+
+    const content = document.querySelector(".content");
+
+    content.innerHTML += section_1_html;
+    content.innerHTML += section_2_html;
+    content.innerHTML += section_3_html;
+    content.innerHTML += section_4_html;
+    content.innerHTML += section_5_html;
+
+    renderMathInElement(content, {
+      delimiters: [
+        { left: "\\[", right: "\\]", display: true },
+        { left: "\\(", right: "\\)", display: false }
+      ]
+    });
+  }
+
+  loadSection();
+</script>
