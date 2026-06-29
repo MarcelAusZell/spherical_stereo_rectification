@@ -1,6 +1,132 @@
 <section id="section-04">
   <h2>Spherical Epipolar Geometry</h2>
-  <video  class="infinite-playback" loop autoplay muted playsinline>
+  But before on continuing about the relationship of correspondces between two fisheye images it is important
+  to note that some of those directions stand out. For example, the center pixel of the equirectangular projection
+  corresponds to the forward direction
+  \[
+  (u_{\mathrm{Longitude}},v_{\mathrm{Latitude}})
+  =
+  \textcolor{#7878FF}{(0,0)}
+  \Rightarrow
+  \begin{bmatrix}
+  \sin(\mathrm{longitude})\cos(\mathrm{latitude}) \\
+  \sin(\mathrm{latitude}) \\
+  \cos(\mathrm{longitude})\cos(\mathrm{latitude})
+  \end{bmatrix}
+  =
+  \textcolor{#7878FF}{
+  \begin{bmatrix}
+  0\\
+  0\\
+  1
+  \end{bmatrix}}
+  \]
+
+
+  <div style="display: flex; justify-content: center; padding-bottom: 25px;">
+    <img src="assets/section-04/erp_4.svg" width="80%">
+  </div>
+
+  Depending on the chosen spherical parameterization and the selected longitude and latitude ranges, these directions
+  may differ. What remains invariant though, is the existence of a distinguished optical axis, a pole axis, and a third
+  orthogonal axis that together define the spherical coordinate frame.
+  <div style="display: flex; justify-content: center; padding-top: 25px;">
+    <img src="assets/section-04/coordinates.png" width="80%">
+  </div>
+  <ul>
+    <li style="color: darkgray;">
+      <span style="color: #7878FF;">Optical Axis</span> (here the positive \(z\)-axis)
+    </li>
+    <li style="color: darkgray;">
+      <span style="color: #1CB51C;">Pole Axis</span> (here the positive \(y\)-axis, corresponding to increasing
+      latitude)
+    </li>
+    <li style="color: darkgray;">
+      <span style="color: red;">Remaining Axis</span> (here the positive \(x\)-axis, completing the right-handed
+      coordinate frame)
+    </li>
+  </ul>
+
+
+
+
+
+
+
+
+  Given these coordinate conventions, the epipolar geometry between two spherical cameras can be established:
+  <p>
+    Consider two cameras observing a world point \(P\). The projections of \(P\) onto the unit spheres of the left and
+    right cameras are denoted by \(s_L\) and \(s_R\), respectively. The cameras themselves are described by their
+    centers \(C_L\) and \(C_R\) as well as their orientations in the world coordinate system. In the present convention,
+    the optical axes point approximately towards the observed scene, while the pole axes define the
+    <span style="color: red;">north</span> and
+    <span style="color: blue;">south</span>
+    poles of the spherical images.
+    Furthermore, the baseline connecting the two camera centers
+    intersects each unit sphere in two antipodal points. These points describe
+    the epipoles of the corresponding camera and represent the directions towards
+    and away from the opposite camera center.
+  </p>
+  <div style="display: flex; justify-content: center; padding-bottom: 25px;">
+    <img src="assets/section-04/epipolar_geometry_01.svg" width="80%">
+  </div>
+  If the world points \(P\) is seen by camera \(R\) as \(P_R\) and by camera \(L\) as \(P_L\) than their
+  relationship can be described by a rigid body transformation:
+  \[
+  \begin{align*}
+  && P_R &= R P_L + t \\
+  \iff && \lambda_R s_R &= R \lambda_L s_L + t && \left(\substack{{P_R = \lambda_R s_R} \\ {P_L = \lambda_L s_L}}\right)
+  \\
+  \iff && \lambda_R t \times s_R &= t \times R \lambda_L s_L + \underbrace{t \times t}_{=0} &&
+  \left(\substack{\text{Cross product from left}}\right)\\
+  \iff && \underbrace{s_R \cdot ( \lambda_R t \times s_R)}_{=0} &= s_R \cdot (t \times R \lambda_L s_L) &&
+  \left(\substack{\text{Dot product from left}}\right)\\
+  \iff && 0 &= \lambda_L s_R \cdot (t \times R s_L) \\
+  \iff && 0 &= s_R \cdot (t \times R s_L) && \left(\substack{\lambda_L \neq 0}\right)\\
+  \iff && 0 &= s_R^\top (t \times R s_L) && \left(\substack{a \cdot b \,=\, a^\top b}\right)\\
+  \iff && 0 &= s_R^\top ([t]_\times R s_L) && \left(\substack{\text{Cross product as skew symetric matrix}}\right)\\
+  \iff && 0 &= s_R^\top E s_L && \left(\substack{E = [t]_\times R}\right)
+  \end{align*}
+  \]
+
+  Observe now that this epipolar constraint does not enforce an epipolar line (as in the planar stereo setup) but an
+  epipolar great circle given by
+  \[
+
+  \begin{align*}
+  G_R(s_L) &= \{s \in \mathbb{S}^2 \mid s^\top \underbrace{E s_L}_{n_R} = 0\} \\
+  &= \{s \in \mathbb{S}^2 \mid s^\top n_R = 0\} \\
+  \end{align*}
+  \]
+
+  The vector
+  \(
+  n_R = E s_L
+  \)
+  defines the normal of the epipolar plane (as seen by camera \(C_R\)). Consequently, all corresponding
+  viewing directions \(s\) satisfy
+  \(
+  s^\top n_R = 0
+  \)
+  which is another way of saying that they lie within this plane. Thus the intersection of the epipolar plane with the
+  sphere
+  forms a great circle, which represents the spherical epipolar curve also called epipolar great circle:
+
+
+  <div style="display: flex; justify-content: center; padding-bottom: 25px;">
+    <img src="assets/section-04/epipolar_geometry_02.svg" width="80%">
+  </div>
+
+  Visualizing them on the actual image reveals that all epipolar great circles meet at certain points, those points are exactly the 
+  epipoles:
+
+
+  <div style="display: flex; justify-content: center; padding-bottom: 25px; padding-top: 25px;">
+    <img src="assets/section-04/points_lines_unrectified.png" width="100%">
+  </div>
+
+  <video class="infinite-playback" loop autoplay muted playsinline>
     <source src="assets/section-04/points_lines_unrectified.mp4" type="video/mp4">
   </video>
 </section>
