@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Spherical Stereo Rectification</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
   <link rel="stylesheet" href="./styles/content.css" />
@@ -17,8 +17,20 @@
       margin: 0;
       background-color: black;
     }
+
     html {
       scroll-behavior: smooth;
+    }
+
+    .katex-display {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 0.25rem;
+    }
+
+    .katex {
+      font-size: clamp(0.7rem, 2.5vw, 1.1rem);
     }
   </style>
 </head>
@@ -107,4 +119,22 @@
   }
 
   loadSection();
+
+
+</script>
+<script>
+  function togglePlay(id) {
+    const video = document.getElementById(id);
+
+    if (video.paused) {
+      if (video.ended) {
+        video.currentTime = 0;
+      }
+      video.play();
+      video.style.cursor = "pointer"
+    } else {
+      video.pause();
+      video.style.cursor = "grab"
+    }
+  }
 </script>

@@ -1,8 +1,16 @@
 <section id="section-02">
-  <h1>Fisheye Images</h1>
-  Fisheye images can cover large amounts of scene contents
-  <video class="infinite-playback" style="max-width: 500px;" autoplay muted playsinline>
+  <h2>Fisheye Images</h2>
+
+  Fisheye cameras can capture a very large portion of the surrounding scene.
+  This coverage is commonly described by the camera's field of view.
+
+  <video id="fisheye-video" class="infinite-playback" style="max-width: 300px; padding-top: 20px; padding-bottom: 30px;"
+    autoplay muted playsinline onclick="togglePlay('fisheye-video')">
     <source src="assets/section-02/fisheye_video.mp4" type="video/mp4">
   </video>
- 
+
+  However, their image representation is challenging for many computer vision
+  tasks. For example, in stereo depth estimation, corresponding points have
+  to be found in two images (because their displacement is used to estimate depth).
+  But the strong distortion of fisheye lenses makes this task much harder.
 </section>

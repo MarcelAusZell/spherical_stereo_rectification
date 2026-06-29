@@ -1,6 +1,122 @@
 <section id="section-03">
-  <h1>Fisheye Projections</h1>
-  <video  class="infinite-playback" autoplay muted playsinline>
+  <h2>Fisheye Projections</h2>
+  For this reason, fisheye images are often transformed into alternative
+  image representations that simplify further processing. A common choice is
+  the equirectangular projection.
+
+  An equirectangular image can be understood as a flattened representation
+  of a sphere, similar to how world maps represent the surface of the Earth.
+  The horizontal axis corresponds to the longitude, while the vertical axis
+  corresponds to the latitude. Since the longitude covers a range of
+  \(360^\circ\) and the latitude a range of \(180^\circ\), equirectangular
+  images typically use a width-to-height ratio of 2:1.
+
+  Starting with a regular image grid, each pixel position is interpreted as
+  a longitude and latitude pair. The longitude covers the range from
+  \(-\pi\) to \(\pi\), while the latitude covers the range from
+  \(-\frac{\pi}{2}\) to \(\frac{\pi}{2}\).
+  \[
+  \begin{align*}
+  u \in [0,W)
+  &\overset{/W}{\longrightarrow}
+  \frac{u}{W} \in [0,1)
+  \\
+  &\overset{\cdot\,2\pi}{\longrightarrow}
+  \frac{u}{W}\,2\pi \in [0,2\pi)
+  \\
+  &\overset{-\pi}{\longrightarrow}
+  \left(\frac{u}{W}\,2\pi\right)-\pi
+  \in [-\pi,\pi)
+  \end{align*}
+
+  \begin{align*}
+  v \in [0,H)
+  &\overset{/H}{\longrightarrow}
+  \frac{v}{H} \in [0,1)
+  \\
+  &\overset{\cdot\,\pi}{\longrightarrow}
+  \frac{v}{H}\,\pi \in [0,\pi)
+  \\
+  &\overset{-\frac{\pi}{2}}{\longrightarrow}
+  \left(\frac{v}{H}\,\pi\right)-\frac{\pi}{2}
+  \in \left[-\frac{\pi}{2},\frac{\pi}{2}\right)
+  \end{align*}
+  \]
+  <div style="display: flex; justify-content: center; padding-bottom: 25px;">
+    <img src="assets/section-02/erp_1.svg" width="80%">
+  </div>
+
+  These angle pairs define viewing directions on the unit sphere. Using
+  spherical coordinates, each longitude and latitude pair can be converted
+  into a three-dimensional unit vector:
+
+  \[
+  \begin{bmatrix}
+  x \\
+  y \\
+  z
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  \sin(\mathrm{longitude}) \cos(\mathrm{latitude}) \\
+  \sin(\mathrm{latitude}) \\
+  \cos(\mathrm{longitude}) \cos(\mathrm{latitude})
+  \end{bmatrix}
+  \]
+  <div style="display: flex; justify-content: center; padding-bottom: 25px;">
+    <img src="assets/section-02/erp_2.svg" width="80%">
+  </div>
+
+  These directions can then be projected into the original fisheye image
+  using the calibrated camera model. This produces image coordinates
+  \((u,v)\) in the fisheye image.
+
+
+
+  <div style="display: flex; justify-content: center; padding-top: 25px;  padding-bottom: 25px; align-items: center;">
+    <img src="assets/section-02/camera_model_equidistant.png" width="40%">
+
+    <div style="font-size: smaller; color: darkgray;">
+      <b style="text-decoration: underline;">Fisheye Camera Models</b><br>
+      Since we are dealing with fisheye images, a fisheye camera model is
+      typically used. Such models try to imitate the behavior of a physical
+      fisheye lens.
+
+      Conventional pinhole cameras can only observe a limited field of view.
+      Rays arriving from very large viewing angles would intersect the image
+      plane outside the sensor and therefore could not be captured.
+
+      Real fisheye lenses overcome this limitation by using a combination of
+      convex and concave lens elements that bend incoming rays toward the image
+      center. Accurately modeling the complete optical system would be very
+      complicated and often unnecessary. Instead, camera models provide a
+      simplified mathematical description of this behavior.
+
+      The equidistant model, for example, assumes that equal angular distances
+      on the viewing sphere correspond to equal distances on the image plane, thus creating a "pulling effect" of the
+      ray towards the optical center
+    </div>
+  </div>
+
+  Thus we have a mapping between every pixel in the equirectangular image and its corresponding
+  location in the original fisheye image. By sampling the image intensity at
+  these positions, an equirectangular projection of the fisheye image is
+  obtained:
+
+  <div style="display: flex; justify-content: center;">
+    <img src="assets/section-02/erp_3.svg" width="80%">
+  </div>
+
+  If you will you can also imagine the equirectangular image as a texture wrapped around
+  a sphere, similar to a sticker covering a globe. Each pixel of the image
+  corresponds to exactly one viewing direction on the unit sphere.
+  The field of view of a camera thereby just determines how much of this
+  sphere is visible. A conventional camera may only observe a relatively
+  small region of the sphere, whereas fisheye cameras can capture a much
+  larger portion, often approaching or even exceeding \(180^\circ\). 
+
+  <video id="fisheye-projections" class="infinite-playback" autoplay muted playsinline
+    onclick="togglePlay('fisheye-projections')" style="padding-top: 20px;">
     <source src="assets/section-03/fisheye_projections.mp4" type="video/mp4">
   </video>
 </section>
