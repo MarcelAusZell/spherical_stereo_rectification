@@ -1,4 +1,4 @@
-.infinite-playback {
+.interactive-video {
     display: block;
     width: 100%;
     height: auto;
@@ -6,4 +6,25 @@
     margin-right: auto;
     user-select: none;  
     cursor: pointer;
+}
+
+.video {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    user-select: none;  
+}
+
+.video-overlay {
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.3);
+    color:white;
+    pointer-events:none;
+    font-family: KaTeX_Typewriter;
 }

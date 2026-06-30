@@ -112,7 +112,7 @@
   corresponds to exactly one viewing direction on the unit sphere.
   The field of view of a camera thereby just determines how much of this
   sphere is visible.
-  <video 
+  <!-- <video 
   id="fisheye-projections"
   class="infinite-playback"
   autoplay muted playsinline
@@ -122,8 +122,21 @@
     padding-bottom: 25px;
     ">
     <source src="assets/section-03/fisheye_projections.mp4" type="video/mp4">
-  </video>
+  </video> -->
+
+
+  <div style="position: relative; display: flex; justify-content: center;">
+    <video class="interactive-video" id="fisheye-projections" style=" padding-top:20px; padding-bottom:30px;" muted
+      playsinline onclick="togglePlay('fisheye-projections')">
+      <source src="assets/section-03/fisheye_projections.mp4" type="video/mp4">
+    </video>
+
+    <div id="fisheye-projections-overlay" class="video-overlay">
+      Click me
+    </div>
+  </div>
+
   All in all it is easier to imagine fisheye images as a set of 3D directions which cover a
-  certain portion of the  sphere.
+  certain portion of the sphere.
 
 </section>

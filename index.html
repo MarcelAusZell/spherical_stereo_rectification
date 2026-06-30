@@ -125,16 +125,38 @@
 <script>
   function togglePlay(id) {
     const video = document.getElementById(id);
+    const overlay = document.getElementById(id + "-overlay");
 
     if (video.paused) {
       if (video.ended) {
         video.currentTime = 0;
       }
       video.play();
-      video.style.cursor = "pointer"
+      video.style.cursor = "pointer";
+      overlay.style.display = "none";
     } else {
       video.pause();
-      video.style.cursor = "grab"
+      video.style.cursor = "grab";
+      overlay.style.display = "flex";
     }
   }
+
+  function initializeVideo(id) {
+    const video = document.getElementById(id);
+    const overlay = document.getElementById(id + "-overlay");
+
+    // show overlay initially
+    overlay.style.display = "flex";
+
+    // show overlay when the video reaches the end
+    video.addEventListener("ended", () => {
+      overlay.style.display = "flex";
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    initializeVideo("fisheye-video");
+    initializeVideo("another-video");
+    initializeVideo("third-video");
+  });
 </script>

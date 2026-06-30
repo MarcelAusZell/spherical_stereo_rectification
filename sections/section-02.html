@@ -4,10 +4,19 @@
   Fisheye cameras can capture a very large portion of the surrounding scene.
   This coverage is commonly described by the camera's field of view.
 
-  <video id="fisheye-video" class="infinite-playback" style="max-width: 300px; padding-top: 20px; padding-bottom: 30px;"
-    autoplay muted playsinline onclick="togglePlay('fisheye-video')">
-    <source src="assets/section-02/fisheye_video.mp4" type="video/mp4">
-  </video>
+
+  <div style="position: relative; display: flex; justify-content: center;">
+    <video id="fisheye-video" style="max-width: 300px; padding-top:20px; padding-bottom:30px;" muted playsinline
+      onclick="togglePlay('fisheye-video')">
+      <source src="assets/section-02/fisheye_video.mp4" type="video/mp4">
+    </video>
+
+    <div id="fisheye-video-overlay" class="video-overlay">
+      Click me
+    </div>
+  </div>
+
+
 
   However, their image representation is challenging for many computer vision
   tasks. For example, in stereo depth estimation, corresponding points have

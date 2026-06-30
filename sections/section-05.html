@@ -1,6 +1,266 @@
 <section id="section-05">
   <h2>Spherical Stereo Rectification</h2>
-  <video  class="infinite-playback" loop autoplay muted playsinline>
+
+  For finding corresponding points, searching along the epipolar great circles currently requires searching along the
+  longitude as well as the
+  latitude dimension. Spherical rectification reduces this to one dimension, making correspondence search faster.
+  The idea is to build a rectifying homography which aligns the pole axis with the baseline.
+
+
+  <div style="display: flex; justify-content: center; padding-bottom: 25px; padding-top: 25px;">
+    <img src="assets/section-05/epipolar_geometry_03.svg" width="80%">
+  </div>
+
+  The effect of this is that epipoles and the north and south poles (from the pole axis, here y-axis) align.
+  This is good because great circles on a sphere which pass through the north and south poles are called meridians,
+  <u>circles of same longitude</u>. Thus one search dimension is eleminated and corresponding points only differ in their latitude value.
+  Before visualizing the results, lets look at how to built such a rectifying homography:
+
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:20px;
+">
+    <div style="width:60%;">
+      The new pole axis should point along the stereo baseline. Therefore the first axis is chosen directly from the
+      two camera centers: start at the left camera center and point toward the right camera center. After normalization
+      this becomes the new y-axis.
+      \[
+      \textcolor{#00A650}{
+      \mathbf{y}_{\mathrm{new}}
+      =
+      \frac{\mathbf{C}_R - \mathbf{C}_L}
+      {\left\lVert \mathbf{C}_R - \mathbf{C}_L \right\rVert}}
+      \]
+    </div>
+
+    <img src="assets/section-05/gram_schmidt_1.svg" style="width:40%;">
+  </div>
+
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:25px 0;
+">
+    <div style="width:60%;">
+      To choose a stable forward direction, first look at the old z-axes of both cameras. They describe where the left
+      and right cameras were looking before rectification.
+      \[
+      \textcolor{#CCCCFF}{\mathbf{z}^{\mathrm{old}}_L},
+      \qquad
+      \textcolor{#CCCCFF}{\mathbf{z}^{\mathrm{old}}_R}
+      \]
+    </div>
+
+    <img src="assets/section-05/gram_schmidt_2.svg" style="width:40%;">
+  </div>
+
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:25px 0;
+">
+    <div style="width:60%;">
+      Move those two old viewing directions together. Their sum gives a single average viewing direction for the
+      rectified pair.
+      \[
+      \textcolor{#CCCCFF}{
+      \mathbf{z}_{\mathrm{temp}}
+      =
+      \mathbf{z}^{\mathrm{old}}_L
+      +
+      \mathbf{z}^{\mathrm{old}}_R}
+      \]
+    </div>
+
+    <img src="assets/section-05/gram_schmidt_3.svg" style="width:40%;">
+  </div>
+
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:25px 0;
+">
+    <div style="width:60%;">
+      This temporary vector is useful, but it is not yet perpendicular to
+      \(\textcolor{#00A650}{\mathbf{y}_{\mathrm{new}}}\). The dashed line shows the part of
+      \(\textcolor{#CCCCFF}{\mathbf{z}_{\mathrm{temp}}}\) that lies in the direction of the new y-axis.
+    </div>
+
+    <img src="assets/section-05/gram_schmidt_4.svg" style="width:40%;">
+  </div>
+
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:25px 0;
+">
+    <div style="width:60%;">
+      Gram-Schmidt now measures exactly how much of
+      \(\textcolor{#CCCCFF}{\mathbf{z}_{\mathrm{temp}}}\) points along
+      \(\textcolor{#00A650}{\mathbf{y}_{\mathrm{new}}}\). This is the scalar projection, shown as the small magenta
+      amount on the green axis.
+      \[
+      \left\langle
+      \mathbf{z}_{\mathrm{temp}},
+      \mathbf{y}_{\mathrm{new}}
+      \right\rangle
+      \]
+    </div>
+
+    <img src="assets/section-05/gram_schmidt_5.svg" style="width:40%;">
+  </div>
+
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:25px 0;
+">
+    <div style="width:60%;">
+      Multiplying this scalar with the direction
+      \(\textcolor{#00A650}{\mathbf{y}_{\mathrm{new}}}\) gives the full projection vector. This is the part that must
+      be removed from \(\textcolor{#CCCCFF}{\mathbf{z}_{\mathrm{temp}}}\).
+      \[
+      \textcolor{#FF1493}{
+      \left\langle
+      \mathbf{z}_{\mathrm{temp}},
+      \mathbf{y}_{\mathrm{new}}
+      \right\rangle
+      \mathbf{y}_{\mathrm{new}}}
+      \]
+    </div>
+
+    <img src="assets/section-05/gram_schmidt_6.svg" style="width:40%;">
+  </div>
+
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:25px 0;
+">
+    <div style="width:60%;">
+
+      Subtract the projection from the temporary vector. What remains is perpendicular to
+      \(\textcolor{#00A650}{\mathbf{y}_{\mathrm{new}}}\), so it can become the new z-axis after normalization.
+      Or in other words "If \( \textcolor{#FF1493}{\bullet} + \textcolor{blue}{\bullet} = \textcolor{#CCCCFF}{\bullet}
+      \) than
+      \( \textcolor{blue}{\bullet} = \textcolor{#CCCCFF}{\bullet} - \textcolor{#FF1493}{\bullet} \)"
+      \[
+      \textcolor{#0000FF}{
+      \mathbf{z}_{\mathrm{new}}
+      =
+      \frac{
+      \mathbf{z}_{\mathrm{temp}}
+      -
+      \left\langle
+      \mathbf{z}_{\mathrm{temp}},
+      \mathbf{y}_{\mathrm{new}}
+      \right\rangle
+      \mathbf{y}_{\mathrm{new}}
+      }
+      {
+      \left\lVert
+      \mathbf{z}_{\mathrm{temp}}
+      -
+      \left\langle
+      \mathbf{z}_{\mathrm{temp}},
+      \mathbf{y}_{\mathrm{new}}
+      \right\rangle
+      \mathbf{y}_{\mathrm{new}}
+      \right\rVert
+      }}
+      \]
+    </div>
+
+    <img src="assets/section-05/gram_schmidt_7.svg" style="width:40%;">
+  </div>
+
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:25px 0;
+">
+    <div style="width:60%;">
+      Now the rectified coordinate frame already has two orthonormal axes:
+      \(\textcolor{#00A650}{\mathbf{y}_{\mathrm{new}}}\) along the baseline and
+      \(\textcolor{#0000FF}{\mathbf{z}_{\mathrm{new}}}\) as the corrected forward direction.
+    </div>
+
+    <img src="assets/section-05/gram_schmidt_8.svg" style="width:40%;">
+  </div>
+
+  <div style="
+    display:flex;
+    align-items:center;
+    gap:20px;
+    padding:25px 0;
+">
+    <div style="width:60%;">
+      The last axis is fixed by the right-handed coordinate system. Take the cross product of the two axes that are
+      already known:
+      \[
+      \textcolor{#FF0000}{
+      \mathbf{x}_{\mathrm{new}}
+      =
+      \mathbf{y}_{\mathrm{new}}
+      \times
+      \mathbf{z}_{\mathrm{new}}}
+      \]
+      Together, these three axes form the rotation used in the rectifying homography.
+    </div>
+
+    <img src="assets/section-05/gram_schmidt_9.svg" style="width:40%;">
+  </div>
+
+  Now the three new axes are stacked into the rectifying rotation. Each row tells where one axis of the new camera
+  frame points in the old coordinate system:
+  \[
+  \mathbf{R}_{\mathrm{rect}}
+  =
+  \begin{bmatrix}
+  \mathbf{x}_{\mathrm{new}}^T \\
+  \mathbf{y}_{\mathrm{new}}^T \\
+  \mathbf{z}_{\mathrm{new}}^T
+  \end{bmatrix}
+  \]
+  This does not change the real cameras. Instead, it creates a virtual rectified camera coordinate system and rotates
+  both camera views into that same virtual frame. To be more specific if the original camera extrinsic rotations are
+  \(
+  \mathbf{R}_L,
+  \mathbf{R}_R
+  \)
+  and \(\mathbf{d}_L\) and \(\mathbf{d}_R\) are some viewing ray directions of a pixel in the left and right
+  camera coordinate systems, than each ray can then be mapped into the shared rectified frame like this
+  \[
+  \mathbf{d}_{L,\mathrm{rect}}
+  =
+  \mathbf{R}_{\mathrm{rect}}
+  \mathbf{R}_L^T
+  \mathbf{d}_L
+  \]
+  \[
+  \mathbf{d}_{R,\mathrm{rect}}
+  =
+  \mathbf{R}_{\mathrm{rect}}
+  \mathbf{R}_R^T
+  \mathbf{d}_R
+  \]
+  With these new rectified ray directions, a new rectified equirectangular projection can be built for the left and right image. As mentioned above,
+  the epipole axis is now aligned with the pole axis and epipolar great circles become meridians, meaning circles of equal
+  longitude. The correspondence search therefore only has to move along one coordinate dimension instead of searching over both
+  longitude and latitude:
+  <div style="display: flex; justify-content: center; padding-bottom: 25px; padding-top: 25px;">
+    <img src="assets/section-05/points_lines_rectified.png" width="100%">
+  </div>
+  <video class="video" loop autoplay muted playsinline>
     <source src="assets/section-05/points_lines_rectified.mp4" type="video/mp4">
   </video>
+
 </section>
