@@ -72,11 +72,11 @@
   \((u,v)\) in the fisheye image.
 
 
+  <div style="display: flex; justify-content: center; align-items: center; gap: 25px; padding: 25px 0;">
+    <img src="assets/section-02/camera_model_equidistant.png"
+      style="width: 40%; flex: 0 0 40%; max-width: 40%; height: auto;">
 
-  <div style="display: flex; justify-content: center; padding-top: 25px;  padding-bottom: 25px; align-items: center;">
-    <img src="assets/section-02/camera_model_equidistant.png" width="40%">
-
-    <div style="font-size: smaller; color: darkgray;">
+    <div style="font-size: smaller; color: darkgray; flex: 1;">
       <b style="text-decoration: underline;">Fisheye Camera Models</b><br>
       Since we are dealing with fisheye images, a fisheye camera model is
       typically used. Such models try to imitate the behavior of a physical
@@ -93,8 +93,8 @@
       simplified mathematical description of this behavior.
 
       The equidistant model, for example, assumes that equal angular distances
-      on the viewing sphere correspond to equal distances on the image plane, thus creating a "pulling effect" of the
-      ray towards the optical center
+      on the viewing sphere correspond to equal distances on the image plane,
+      thus creating a "pulling effect" of the ray toward the optical center.
     </div>
   </div>
 
@@ -103,15 +103,12 @@
   these positions, an equirectangular projection of the fisheye image is
   obtained:
 
-  <div style="display: flex; justify-content: center;">
+  <div style="display: flex; justify-content: center; padding-bottom:25px">
     <img src="assets/section-02/erp_3.svg" width="80%">
   </div>
 
-  If you will you can also imagine the equirectangular image as a texture wrapped around
-  a sphere, similar to a sticker covering a globe. Each pixel of the image
-  corresponds to exactly one viewing direction on the unit sphere.
-  The field of view of a camera thereby just determines how much of this
-  sphere is visible.
+  If you like, you can also imagine the equirectangular image as a texture wrapped around
+  a sphere, similar to a sticker covering a globe:
   <!-- <video 
   id="fisheye-projections"
   class="infinite-playback"
@@ -126,7 +123,7 @@
 
 
   <div style="position: relative; display: flex; justify-content: center;">
-    <video class="interactive-video" id="fisheye-projections" style=" padding-top:20px; padding-bottom:30px;" muted
+    <video class="interactive-video" id="fisheye-projections" style=" padding-top:25px; padding-bottom:25px;" muted
       playsinline onclick="togglePlay('fisheye-projections')">
       <source src="assets/section-03/fisheye_projections.mp4" type="video/mp4">
     </video>
@@ -135,8 +132,11 @@
       Click me
     </div>
   </div>
-
-  All in all it is easier to imagine fisheye images as a set of 3D directions which cover a
+  Each pixel of the image
+  corresponds to exactly one viewing direction on the unit sphere.
+  The field of view of a camera thereby just determines how much of this
+  sphere is visible.
+  All in all, it is easier to imagine fisheye images as a set of 3D directions that cover a
   certain portion of the sphere.
 
 </section>

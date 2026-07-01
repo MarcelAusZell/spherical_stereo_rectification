@@ -1,6 +1,6 @@
 <section id="section-04">
   <h2>Spherical Epipolar Geometry</h2>
-  But before on continuing about the relationship of correspondces between two fisheye images it is important
+  Before continuing with the relationship of correspondences between two fisheye images, it is important
   to note that some of those directions stand out. For example, the center pixel of the equirectangular projection
   corresponds to the forward direction
   \[
@@ -28,7 +28,7 @@
   </div>
 
   Depending on the chosen spherical parameterization and the selected longitude and latitude ranges, these directions
-  may differ. What remains invariant though, is the existence of an
+  may differ. What remains invariant, though, is the existence of an
   <span style="color: #7878FF;">optical axis</span>, a
   <span style="color: #1CB51C;">pole axis</span> and a third
   <span style="color: red;">remaining axis</span> orthogonal to the previous two.
@@ -53,7 +53,7 @@
   <div style="display: flex; justify-content: center; padding-bottom: 25px;">
     <img src="assets/section-04/epipolar_geometry_01.svg" width="80%">
   </div>
-  If the world points \(P\) is seen by camera \(R\) as \(P_R\) and by camera \(L\) as \(P_L\) than their
+  If the world point \(P\) is seen by camera \(R\) as \(P_R\) and by camera \(L\) as \(P_L\), then their
   relationship can be described by a rigid body transformation:
   \[
   \begin{align*}
@@ -67,12 +67,12 @@
   \iff && 0 &= \lambda_L s_R \cdot (t \times R s_L) \\
   \iff && 0 &= s_R \cdot (t \times R s_L) && \left(\substack{\lambda_L \neq 0}\right)\\
   \iff && 0 &= s_R^\top (t \times R s_L) && \left(\substack{a \cdot b \,=\, a^\top b}\right)\\
-  \iff && 0 &= s_R^\top ([t]_\times R s_L) && \left(\substack{\text{Cross product as skew symetric matrix}}\right)\\
+  \iff && 0 &= s_R^\top ([t]_\times R s_L) && \left(\substack{\text{Cross product as skew symmetric matrix}}\right)\\
   \iff && 0 &= s_R^\top E s_L && \left(\substack{E = [t]_\times R}\right)
   \end{align*}
   \]
-
-  Observe now that this epipolar constraint does not enforce an epipolar line (as in the planar stereo setup) but an
+  Which is exactly the same as the epipolar constraint in classic stereo vision.
+  But observe now that this epipolar constraint does not enforce an epipolar line (as in the planar stereo setup) but an
   epipolar great circle given by
   \[
 
@@ -93,14 +93,14 @@
   \)
   which is another way of saying that they lie within this plane. Thus the intersection of the epipolar plane with the
   sphere
-  forms a great circle, which represents the spherical epipolar curve also called epipolar great circle:
+  forms a great circle, which represents the spherical epipolar curve, also called the epipolar great circle:
 
 
   <div style="display: flex; justify-content: center; padding-bottom: 25px;">
     <img src="assets/section-04/epipolar_geometry_02.svg" width="80%">
   </div>
 
-  Visualizing them on the actual image reveals that all epipolar great circles meet at certain points, those points are
+  Visualizing them on the actual image reveals that all epipolar great circles meet at certain points. Those points are
   exactly the
   epipoles:
 
@@ -112,4 +112,4 @@
   <video class="video" loop autoplay muted playsinline>
     <source src="assets/section-04/points_lines_unrectified.mp4" type="video/mp4">
   </video>
-</section
+</section>

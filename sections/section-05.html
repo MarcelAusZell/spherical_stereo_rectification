@@ -1,9 +1,9 @@
 <section id="section-05">
   <h2>Spherical Stereo Rectification</h2>
 
-  For finding corresponding points, searching along the epipolar great circles currently requires searching along the
-  longitude as well as the
-  latitude dimension. Spherical rectification reduces this to one dimension, making correspondence search faster.
+  To find corresponding points, searching along the epipolar great circles currently requires searching along both the
+  longitude and
+  latitude dimensions. Spherical rectification reduces this to one dimension, making correspondence search faster.
   The idea is to build a rectifying homography which aligns the pole axis with the baseline.
 
 
@@ -11,10 +11,10 @@
     <img src="assets/section-05/epipolar_geometry_03.svg" width="80%">
   </div>
 
-  The effect of this is that epipoles and the north and south poles (from the pole axis, here y-axis) align.
+  The effect of this is that the epipoles and the north and south poles (from the pole axis, here y-axis) align.
   This is good because great circles on a sphere which pass through the north and south poles are called meridians,
-  <u>circles of same longitude</u>. Thus one search dimension is eleminated and corresponding points only differ in their latitude value.
-  Before visualizing the results, lets look at how to built such a rectifying homography:
+  <u>circles of the same longitude</u>. Thus, one search dimension is eliminated, and corresponding points only differ in their latitude value.
+  Before visualizing the results, let's look at how to build such a rectifying homography:
 
   <div style="
     display:flex;
@@ -102,8 +102,7 @@
     <div style="width:60%;">
       Gram-Schmidt now measures exactly how much of
       \(\textcolor{#CCCCFF}{\mathbf{z}_{\mathrm{temp}}}\) points along
-      \(\textcolor{#00A650}{\mathbf{y}_{\mathrm{new}}}\). This is the scalar projection, shown as the small magenta
-      amount on the green axis.
+      \(\textcolor{#00A650}{\mathbf{y}_{\mathrm{new}}}\).
       \[
       \left\langle
       \mathbf{z}_{\mathrm{temp}},
@@ -149,7 +148,7 @@
       Subtract the projection from the temporary vector. What remains is perpendicular to
       \(\textcolor{#00A650}{\mathbf{y}_{\mathrm{new}}}\), so it can become the new z-axis after normalization.
       Or in other words "If \( \textcolor{#FF1493}{\bullet} + \textcolor{blue}{\bullet} = \textcolor{#CCCCFF}{\bullet}
-      \) than
+      \) then
       \( \textcolor{blue}{\bullet} = \textcolor{#CCCCFF}{\bullet} - \textcolor{#FF1493}{\bullet} \)"
       \[
       \textcolor{#0000FF}{
@@ -231,13 +230,13 @@
   \end{bmatrix}
   \]
   This does not change the real cameras. Instead, it creates a virtual rectified camera coordinate system and rotates
-  both camera views into that same virtual frame. To be more specific if the original camera extrinsic rotations are
+  both camera views into that same virtual frame. To be more specific, if the original camera extrinsic rotations are
   \(
   \mathbf{R}_L,
   \mathbf{R}_R
   \)
   and \(\mathbf{d}_L\) and \(\mathbf{d}_R\) are some viewing ray directions of a pixel in the left and right
-  camera coordinate systems, than each ray can then be mapped into the shared rectified frame like this
+  camera coordinate systems, then each ray can be mapped into the shared rectified frame like this:
   \[
   \mathbf{d}_{L,\mathrm{rect}}
   =
@@ -252,7 +251,7 @@
   \mathbf{R}_R^T
   \mathbf{d}_R
   \]
-  With these new rectified ray directions, a new rectified equirectangular projection can be built for the left and right image. As mentioned above,
+  With these new rectified ray directions, a new rectified equirectangular projection can be built for the left and right images. As mentioned above,
   the epipole axis is now aligned with the pole axis and epipolar great circles become meridians, meaning circles of equal
   longitude. The correspondence search therefore only has to move along one coordinate dimension instead of searching over both
   longitude and latitude:
